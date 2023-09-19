@@ -1,3 +1,0 @@
-
-adafaf
-boa tarde neymar!
