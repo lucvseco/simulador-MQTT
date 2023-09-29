@@ -3,19 +3,19 @@ import time
 
 class comunicacao:
     def enviar_informacoes(self, origem, destino, velocidade, posicao):
-        # Implemente aqui a lógica de envio de informações para a central de controle
+        
         pass
 
     def receber_comando_velocidade(self):
-        # Implemente aqui a lógica para receber o comando de mudança de velocidade
+        
         pass
 
     def receber_novo_destino(self):
-        # Implemente aqui a lógica para receber o novo destino da central de controle
+        
         pass
 
     def enviar_mensagem(self, destino, mensagem):
-        # Implemente aqui a lógica de envio de mensagem para um destino específico
+        
         pass
 
 class Pessoa:
@@ -46,9 +46,9 @@ class Carro:
     def mover(self, nova_posicao):
            if not self.estacionado:
             self.posicao = nova_posicao
-            self.enviar_informacoes()  # Envia informações ao mover
+            self.enviar_informacoes()  #informações ao mover
 
-            # Verifica se chegou ao destino
+            #verifica se chegou ao destino
             if self.posicao == self.destino:
                 self.chegar_destino()
             else:
@@ -62,7 +62,7 @@ class CentralControle:
         self.carros = []
         self.pessoas = []
         
-        # Adicionando listas para armazenar histórico
+    
         self.historico_velocidade = []
         self.historico_posicao = []
     def cadastrar_carro(self, carro):
@@ -78,7 +78,7 @@ class CentralControle:
         self.comunicacao.enviar_pedido(self)
 
     def enviar_carro(self, carro, pessoa):
-        # Implemente a lógica de cálculo de rota aqui
+      
         
         if carro.velocidade == 0:
             rota = self.calcular_rota(carro.posicao, pessoa.posicao_atual)
@@ -88,18 +88,18 @@ class CentralControle:
             self.enviar_rota(carro, rota)
             carro.chegar_destino()
 
-            # Após o carro chegar ao destino, mudar a velocidade
-            nova_velocidade = random.randint(30, 120)  # Exemplo de nova velocidade aleatória
+            #carro chegar ao destino, muda a velocidade
+            nova_velocidade = random.randint(0, 0) 
             carro.mudar_velocidade(nova_velocidade)
         else:
             print(f"O carro {carro.placa} não está disponível no momento.")
             
-        # Após mover o carro, registrar a posição e velocidade
+    
         self.historico_velocidade.append(carro.velocidade)
         self.historico_posicao.append(carro.posicao)
 
     def encontrar_carro_disponivel(self):
-        # Implemente a lógica para encontrar um carro disponível
+        
         carros_disponiveis = [carro for carro in self.carros if carro.velocidade == 0]
         if carros_disponiveis:
             return carros_disponiveis[0]
