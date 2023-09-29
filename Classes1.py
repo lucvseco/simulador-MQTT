@@ -34,14 +34,12 @@ class CentralControle:
             self.enviar_carro(carro_disponivel, pessoa)
 
     def enviar_carro(self, carro, pessoa):
-        # Implemente a lógica de cálculo de rota aqui
         rota = calcular_rota(carro.posicao, pessoa.posicao)
         carro.mover(pessoa.posicao, velocidade=60)
-        pessoa.destino = (random.randint(0, 100), random.randint(0, 100))  # Exemplo de destino aleatório
+        pessoa.destino = (random.randint(0, 100), random.randint(0, 100))  #destino aleatório
         carro.mover(pessoa.destino, velocidade=60)
 
     def encontrar_carro_disponivel(self):
-        # Implemente a lógica para encontrar um carro disponível
         carros_disponiveis = [carro for carro in self.carros if carro.velocidade == 0]
         if carros_disponiveis:
             return carros_disponiveis[0]
@@ -49,28 +47,28 @@ class CentralControle:
             return None
 
 def calcular_rota(origem, destino):
-    # Implemente a lógica de cálculo de rota aqui
-    return []  # Retornar a lista de coordenadas da rota
+    #calculo da rota
+    return []  #lista de coordenadas da rota
 
 if __name__ == "__main__":
     central = CentralControle()
 
-    # Cadastrar carros
+    #Cadastrar carros
     for i in range(5):
         carro = Carro(id=i)
         central.cadastrar_carro(carro)
 
-    # Cadastrar pessoas
+    #Cadastrar pessoas
     for i in range(10):
         pessoa = Pessoa(nome=f"Pessoa {i}", posicao_atual=(random.randint(0, 100), random.randint(0, 100)), destino=None)
         central.cadastrar_pessoa(pessoa)
         central.enviar_pedido(pessoa)
 
-    # Simulação de movimento dos carros
+    #Simulação de movimento dos carros
     while True:
         for carro in central.carros:
             if carro.velocidade > 0:
-                # Simulação de movimento
+                #Simulação de movimento
                 nova_posicao = (carro.posicao[0] + 1, carro.posicao[1] + 1)  # Exemplo de movimento simples
                 carro.mover(nova_posicao, nova_velocidade=60)
                 print(f"Carro {carro.id} se moveu para {nova_posicao}")
