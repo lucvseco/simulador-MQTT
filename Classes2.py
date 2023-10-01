@@ -30,7 +30,7 @@ class comunicacao:
         com = comunicacao()
 
         # Suponha que você tenha uma instância de Carro
-        carro = Carro("ABC123")
+        carro = Carro("1")
 
         # Exemplo de receber um comando de velocidade
         nova_velocidade = 80
@@ -76,8 +76,8 @@ class Pessoa:
         self.comunicacao = comunicacao()
 
 class Carro:
-    def __init__(self, placa):
-        self.placa = placa
+    def __init__(self, id):
+        self.id = id
         self.velocidade = 0
         self.posicao = (0, 0)
         self.comunicacao = comunicacao()
@@ -102,7 +102,7 @@ class Carro:
             if self.posicao == self.destino:
                 self.chegar_destino()
             else:
-                print(f"O carro {self.placa} está estacionado e não pode se mover.")
+                print(f"O carro {self.id} está estacionado e não pode se mover.")
             
     def chegar_destino(self):
         self.estacionado = True
@@ -142,7 +142,7 @@ class CentralControle:
             nova_velocidade = random.randint(0, 0) 
             carro.mudar_velocidade(nova_velocidade)
         else:
-            print(f"O carro {carro.placa} não está disponível no momento.")
+            print(f"O carro {carro.id} não está disponível no momento.")
             
     
         self.historico_velocidade.append(carro.velocidade)
