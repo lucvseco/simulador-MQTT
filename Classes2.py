@@ -3,20 +3,70 @@ import time
 
 class comunicacao:
     def enviar_informacoes(self, origem, destino, velocidade, posicao):
-        
+        # Supondo que você queira imprimir as informações no console
+        print(f"Informações enviadas para a central de controle:")
+        print(f"Origem: {origem}")
+        print(f"Destino: {destino}")
+        print(f"Velocidade: {velocidade}")
+        print(f"Posição: {posicao}")
+
+        # Exemplo de uso
+        com = comunicacao()
+        origem = (0, 0)
+        destino = (50, 50)
+        velocidade = 60
+        posicao = (10, 10)
+
+        com.enviar_informacoes(origem, destino, velocidade, posicao)
         pass
 
-    def receber_comando_velocidade(self):
-        
-        pass
+    def receber_comando_velocidade(self, carro, nova_velocidade):
+        if carro:
+            carro.mudar_velocidade(nova_velocidade)
+        else:
+            print("Carro não encontrado. Não é possível receber o comando de velocidade.")
 
-    def receber_novo_destino(self):
-        
-        pass
+        # Exemplo de uso
+        com = comunicacao()
+
+        # Suponha que você tenha uma instância de Carro
+        carro = Carro("ABC123")
+
+        # Exemplo de receber um comando de velocidade
+        nova_velocidade = 80
+        com.receber_comando_velocidade(carro, nova_velocidade)
+
+    def receber_novo_destino(self, carro, novo_destino):
+        if carro:
+            carro.definir_destino(novo_destino)
+        else:
+            print("Carro não encontrado. Não é possível receber o novo destino.")
+
+        # Exemplo de uso
+        com = comunicacao()
+
+        # Suponha que você tenha uma instância de Carro
+        carro = Carro("ABC123")
+
+        # Exemplo de receber um novo destino
+        novo_destino = (60, 60)
+        com.receber_novo_destino(carro, novo_destino)
 
     def enviar_mensagem(self, destino, mensagem):
-        
-        pass
+        if destino and mensagem:
+            print(f"Mensagem enviada para {destino.nome}: {mensagem}")
+        else:
+            print("Destino ou mensagem ausentes. Não é possível enviar a mensagem.")
+
+        # Exemplo de uso
+        com = comunicacao()
+
+        # Suponha que você tenha uma instância de Pessoa como destino
+        destino = Pessoa("João", (50, 50), (60, 60))
+
+        # Exemplo de enviar uma mensagem
+        mensagem = "Olá, como você está?"
+        com.enviar_mensagem(destino, mensagem)
 
 class Pessoa:
     def __init__(self, nome, posicao_atual, destino):
@@ -108,3 +158,34 @@ class CentralControle:
     
     def mudar_velocidade_carro(self, carro, nova_velocidade):
         carro.mudar_velocidade(nova_velocidade)
+
+def calcular_rota(origem, destino):
+    # Implemente a lógica de cálculo de rota aqui
+    return []  # Retornar a lista de coordenadas da rota
+
+if __name__ == "__main__":
+    central = CentralControle()
+
+    num_carros = 5
+    num_pessoas = 10
+
+    # Cadastrar carros
+    for i in range(num_carros):
+        carro = Carro(id=i)
+        central.cadastrar_carro(carro)
+
+    # Cadastrar pessoas
+    for i in range(num_pessoas):
+        pessoa = Pessoa(nome=f"Pessoa {i}", posicao_atual=(random.randint(0, 100), random.randint(0, 100)), destino=None)
+        central.cadastrar_pessoa(pessoa)
+        central.enviar_pedido(pessoa)
+
+    # Simulação de movimento dos carros
+    while True:
+        for carro in central.carros:
+            if carro.velocidade > 0:
+                # Simulação de movimento
+                nova_posicao = (carro.posicao[0] + 1, carro.posicao[1] + 1)  # Exemplo de movimento simples
+                carro.mover(nova_posicao, nova_velocidade=60)
+                print(f"Carro {carro.id} se moveu para {nova_posicao}")
+        time.sleep(1)
