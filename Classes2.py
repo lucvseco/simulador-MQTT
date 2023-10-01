@@ -1,16 +1,35 @@
 import random
 import time
+import paho.mqtt.client as mqtt
+
+client = mqtt.Client()
+
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        print("Conexão bem-sucedida")
+    else:
+        print(f"Falha na conexão, código de retorno: {rc}")
+
+
+def on_message(client, userdata, message):
+    print(f"Mensagem recebida no tópico '{message.topic}': {message.payload.decode()}")
+
+# Configure as funções de callback
+client.on_connect = on_connect
+client.on_message = on_message
+broker_address = "192.168.0.23"  # ip da mquina local
+port = 1883
+
+client.connect(broker_address, port)
+
 
 class comunicacao:
     def enviar_informacoes(self, origem, destino, velocidade, posicao):
-        # Supondo que você queira imprimir as informações no console
-        print(f"Informações enviadas para a central de controle:")
         print(f"Origem: {origem}")
         print(f"Destino: {destino}")
         print(f"Velocidade: {velocidade}")
         print(f"Posição: {posicao}")
 
-        # Exemplo de uso
         com = comunicacao()
         origem = (0, 0)
         destino = (50, 50)
@@ -25,11 +44,7 @@ class comunicacao:
             carro.mudar_velocidade(nova_velocidade)
         else:
             print("Carro não encontrado. Não é possível receber o comando de velocidade.")
-
-        # Exemplo de uso
         com = comunicacao()
-
-        # Suponha que você tenha uma instância de Carro
         carro = Carro("1")
 
         # Exemplo de receber um comando de velocidade
@@ -42,12 +57,8 @@ class comunicacao:
         else:
             print("Carro não encontrado. Não é possível receber o novo destino.")
 
-        # Exemplo de uso
+
         com = comunicacao()
-
-        # Suponha que você tenha uma instância de Carro
-        carro = Carro("ABC123")
-
         # Exemplo de receber um novo destino
         novo_destino = (60, 60)
         com.receber_novo_destino(carro, novo_destino)
@@ -58,7 +69,6 @@ class comunicacao:
         else:
             print("Destino ou mensagem ausentes. Não é possível enviar a mensagem.")
 
-        # Exemplo de uso
         com = comunicacao()
 
         # Suponha que você tenha uma instância de Pessoa como destino
@@ -102,7 +112,7 @@ class Carro:
             if self.posicao == self.destino:
                 self.chegar_destino()
             else:
-                print(f"O carro {self.id} está estacionado e não pode se mover.")
+                print(f"O carro {self.id} está estacionado.")
             
     def chegar_destino(self):
         self.estacionado = True
@@ -111,12 +121,11 @@ class CentralControle:
     def __init__(self):
         self.carros = []
         self.pessoas = []
-        
-    
         self.historico_velocidade = []
         self.historico_posicao = []
+
     def cadastrar_carro(self, carro):
-            self.carros.append(carro)
+        self.carros.append(carro)
 
     def cadastrar_pessoa(self, pessoa):
         self.pessoas.append(pessoa)
@@ -128,8 +137,6 @@ class CentralControle:
         self.comunicacao.enviar_pedido(self)
 
     def enviar_carro(self, carro, pessoa):
-      
-        
         if carro.velocidade == 0:
             rota = self.calcular_rota(carro.posicao, pessoa.posicao_atual)
             carro.mover(pessoa.posicao_atual)
@@ -144,7 +151,6 @@ class CentralControle:
         else:
             print(f"O carro {carro.id} não está disponível no momento.")
             
-    
         self.historico_velocidade.append(carro.velocidade)
         self.historico_posicao.append(carro.posicao)
 
@@ -160,26 +166,25 @@ class CentralControle:
         carro.mudar_velocidade(nova_velocidade)
 
 def calcular_rota(origem, destino):
-    # Implemente a lógica de cálculo de rota aqui
+    carro = Carro()
+    origem = carro.posicao
+    destino = carro.destino
+    distancia = origem - destino
     return []  # Retornar a lista de coordenadas da rota
 
 if __name__ == "__main__":
     central = CentralControle()
-
     num_carros = 5
     num_pessoas = 10
-
     # Cadastrar carros
     for i in range(num_carros):
         carro = Carro(id=i)
         central.cadastrar_carro(carro)
-
     # Cadastrar pessoas
     for i in range(num_pessoas):
         pessoa = Pessoa(nome=f"Pessoa {i}", posicao_atual=(random.randint(0, 100), random.randint(0, 100)), destino=None)
         central.cadastrar_pessoa(pessoa)
         central.enviar_pedido(pessoa)
-
     # Simulação de movimento dos carros
     while True:
         for carro in central.carros:
@@ -189,3 +194,5 @@ if __name__ == "__main__":
                 carro.mover(nova_posicao, nova_velocidade=60)
                 print(f"Carro {carro.id} se moveu para {nova_posicao}")
         time.sleep(1)
+
+
