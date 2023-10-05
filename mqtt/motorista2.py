@@ -15,19 +15,19 @@ def on_connect(client, userdata, flags, rc):
 
 # Função de callback quando uma mensagem é recebida em um tópico assinado
 def on_message(client, userdata, message):
+    print(message.topic)
     passenger_id = message.topic.split("/")[1]
     print(f"Motorista {driver_id} recebeu solicitação do passageiro {passenger_id}: {message.payload.decode('utf-8')}")
     latitude_atual, longitude_atual, latitude_destino, longitude_destino = extract_coordinates(message.payload.decode('utf-8'))
-    # Calcule o trajeto e siga-o
     simulate_ride(driver_id, latitude_atual, longitude_atual, latitude_destino, longitude_destino)
 
 # Configurar o cliente MQTT do motorista
-client_driver = mqtt.Client()
+client_driver = mqtt.Client() # Nossa classe comunicação ao invés do MQTT
 client_driver.on_connect = on_connect
 client_driver.on_message = on_message
 
 # Configurar o endereço do servidor MQTT (Mosquitto) e a porta
-broker_address = "127.0.0.1"  # Substitua pelo endereço correto, se necessário
+broker_address = "127.0.0.1"  
 port = 1883                   # Porta padrão do MQTT
 
 # Conectar-se ao servidor MQTT como motorista
