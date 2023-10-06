@@ -39,7 +39,6 @@ class Passageiro:
     def on_passageiro_connect(self, client, userdata, flags, rc):
         if rc == 0:
             print(f"Passageiro {client._client_id.decode()} conectado com sucesso ao servidor MQTT.")
-            # Enviar uma mensagem de boas-vindas para o passageiro conectado
             mensagem_de_boas_vindas = "Bem-vindo ao sistema de carros!"
             client.publish("passageiro/boas-vindas", mensagem_de_boas_vindas)
         else:
@@ -124,7 +123,6 @@ quarteiroes = [(x, y) for x in range(6) for y in range(6)]
 def plot_map(destinos, viagens_em_andamento):
     plt.figure()
 
-    # Plotar os quarteirões da cidade
     for x, y in quarteiroes:
         plt.plot([x, x + tamanho_quarteirao], [y, y], 'k-', lw=0.5)
         plt.plot([x, x + tamanho_quarteirao], [y + tamanho_quarteirao, y + tamanho_quarteirao], 'k-', lw=0.5)
@@ -146,10 +144,9 @@ def plot_map(destinos, viagens_em_andamento):
         plt.plot(carro.localizacao[0], carro.localizacao[1], 'bs')  
         plt.text(carro.localizacao[0], carro.localizacao[1], carro.nome, fontsize=12, ha='right')
 
-    plt.xlim(-1, 6)
-    plt.ylim(-1, 6)
+    plt.xlim(0, 6)
+    plt.ylim(0, 6)
 
-    # Configurar rótulos e título
     plt.xlabel("Latitude")
     plt.ylabel("Longitude")
     plt.title("Mapa")
@@ -158,8 +155,8 @@ def plot_map(destinos, viagens_em_andamento):
     plt.grid(True)
     plt.show()
 
-mqtt_broker_host = "127.0.0.1"  # Host do broker MQTT (Mosquitto)
-mqtt_broker_port = 1883  # Porta do broker MQTT (Padrão é 1883)
+mqtt_broker_host = "127.0.0.1"
+mqtt_broker_port = 1883  
 
 # Função para atualizar o estado das viagens em andamento
 def atualizar_viagens(viagens_em_andamento, tempo_atual):
@@ -197,8 +194,8 @@ passageiro2 = Passageiro("Passageiro 2", mqtt_broker_host, mqtt_broker_port)
 viagens_em_andamento = []
 central_controle = CentralDeControle()
 
-# Simulação em tempo discreto
-tempo_atual = 0
+
+tempo_atual = 0 #variavel para simular o tempo discreto
 for _ in range(10):
     tempo_atual += 1  
 
@@ -228,7 +225,6 @@ for _ in range(10):
         if carro.em_viagem:
             carro.localizacao = random.choice(quarteiroes)
 
-    # Plotar o mapa atualizado
     plot_map(destinos, viagens_em_andamento)
 
 plt.show()
